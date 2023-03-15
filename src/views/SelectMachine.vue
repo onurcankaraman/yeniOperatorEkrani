@@ -1,7 +1,6 @@
 <script setup>
 import Swal from 'sweetalert2/dist/sweetalert2.js'
 import axios from 'axios'
-import config from '../config'
 </script>
 
 <template>
@@ -21,7 +20,7 @@ import config from '../config'
 
                   <div class="form-outline form-white mb-4">
 
-                    <select class="form-control form-select-lg">
+                    <select id="machine" class="form-control form-select-lg">
                       <option disabled value="">Lütfen Makine Seçiniz</option>
                       <option v-for="data in posts" :value ="data">{{data}}</option>
                     </select>
@@ -31,7 +30,7 @@ import config from '../config'
                 </div>
                 <div class="row">
                   <div class="col-12">
-                    <button class="btn btn-warning btn-md px-5 " @click="girisYap(this)" type="button">
+                    <button class="btn btn-warning btn-md px-5 " @click="girisYap()" type="button">
                       Makine Seçimini Onayla
                       <i class="fa fa-arrow-right px-2" aria-hidden="true"></i>
                     </button>
@@ -77,6 +76,25 @@ import config from '../config'
 
   //.then(response => (this.posts.push(response.data)))
  
+  function girisYap(){
+    var machine = document.getElementById("machine").value
+    localStorage.setItem("makine", machine)
+    console.log(machine)
 
+    Swal.fire({
+    icon: 'info',
+    title: 'Seçim Onaylama',
+    text: 'Seçtiğiniz Makine ' + machine + '. Onaylıyor musunuz?',
+    footer: 'Bir Sorun Yaşadığınızı Düşünüyorsanız; IT Sorumlunuz ile iletişime geçebilirsiniz.',
+    confirmButtonText:'Onayla'
+    }).then(
+    function(){
+      setTimeout(()=>{
+        window.location.href="/Application"
+      },500);
+      
+    }
+  )
+  }
 </script>
 
