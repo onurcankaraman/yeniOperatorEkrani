@@ -8,7 +8,8 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 
 const app = createApp(App)
 
-
+app.config.globalProperties.$hostname = "http://192.168.10.226:1880"
+app.config.globalProperties.$makine = ""
 
 app.use(router)
 

@@ -22,9 +22,8 @@ import config from '../config'
                   <div class="form-outline form-white mb-4">
 
                     <select class="form-control form-select-lg">
-                      <option>Deneme1</option>
-                      <option>Deneme1</option>
-                      <option>Deneme1</option>
+                      <option disabled value="">Lütfen Makine Seçiniz</option>
+                      <option v-for="data in posts" :value ="data">{{data}}</option>
                     </select>
 
 
@@ -61,14 +60,23 @@ import config from '../config'
     methods: {
       getPosts() {
         axios
-          .get("http://localhost:1880/nodered/listMachine")
-          .then(response => (this.posts.push(response.data)))
+          .get( this.$hostname + "/nodered/listMachine")
+          .then(response => {
+            var uzunluk = response.data.length
+            for (var x = 0; x < uzunluk; x = x + 1){
+              //console.log(response.data[x])
+              this.posts.push(response.data[x])
+            }
+          })
           .catch(error => {
             this.errors.push(error);
           });
       }
     }
   };
+
+  //.then(response => (this.posts.push(response.data)))
+ 
 
 </script>
 
