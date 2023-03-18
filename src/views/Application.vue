@@ -8,7 +8,7 @@ import config from '../config'
   <div class="container py-5 h-10">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-12 col-md-8 col-lg-6 col-xl-5 border">
-        <div class="container" style = "height:550px">
+        <div class="container" style = "height:100%">
           <div class="row mt-2">
             <div class="col border"><label>Makine: </label></div>
             <div class="col border"><label id="makine">{{makine}}</label></div>
@@ -19,18 +19,79 @@ import config from '../config'
             <div class="col border"><label id="makineDurumu">{{makineDurumu.state}}</label></div>
           </div>
 
-          <div class="row mt-2">
+          <div class="row mt-2" v-if="alanIsEmri" id="alanIsEmri">
             <div class="col border w-100">
               <div class="row"> <label>İş Emri Seç </label> </div>
               <div class="w-100 mt-2"></div>
               <div class="row mt-2"> 
-                  <select id="machine" class="form-control form-select-sm">
+                  <select id="isEmri" class="form-control form-select-sm">
                     <option disabled value="">Lütfen İş Emri Seçiniz</option>
-                    <option v-for="data in isEmri" :value ="data">{{data}}</option>
+                    <option v-for="data in isEmri" :value ="data">{{data[1]}}</option>
                   </select>
-               </div>
+              </div>
+              <div class="row mt-2"> 
+                <button type="button" @click="uretimEmriOnayla" class="btn btn-warning w-100 h-100 w-100 h-100">Üretim Emrini Onayla</button>
+              </div>
             </div>
           </div>
+
+          <div class="row mt-2" v-if="alanUretimBasla" id="alanUretimBasla">
+            <div class="col border w-100">
+              <div class="row">
+                <div class="col border w-100" ><label>Üretilecek Ürün</label></div>
+                <div class="col border w-100" ><label>{{uretimEmri[1]}}</label></div>
+              </div>
+
+              <div class="row">
+                <div class="col border w-100" ><label>Üretim Numarası</label></div>
+                <div class="col border w-100" ><label>{{uretimEmri[0]}}</label></div>
+              </div>
+
+              <div class="row">
+                <div class="col border w-100" ><label>Üretilecek Adet</label></div>
+                <div class="col border w-100" ><label>{{uretimEmri[2]}}</label></div>
+              </div>
+
+              <div class="row">
+                <div class="col p-1 border"><button type="button" @click="uygulamaBaslangic(true,false,false)" class="btn btn-warning w-100 h-100 w-100 h-100">Yeniden Seç</button></div>
+                <div class="col p-1 border"><button type="button" @click="uretimBasla(uretimEmri[0])" class="btn btn-success w-100 h-100 w-100 h-100">Üretimi Başlat</button></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mt-2" v-if="alanUretimTakip"  id="alanUretimTakip">
+            <div class="col border w-100">
+              <div class="row" style="height: 25px;">
+                <div class="col border w-100" ><label>Üretilecek Ürün</label></div>
+                <div class="col border w-100" ><label>{{uretimEmri[1]}}</label></div>
+              </div>
+              <div class="row mt-2" style="height: 25px;">
+                <div class="col border w-100" ><label>Hedef Adet</label></div>
+                <div class="col border w-100" ><label>Sağlam Üretim</label></div>
+                <div class="col border w-100"><label>Hurda Üretim</label></div>
+              </div>
+
+              <div class="row" style="height: 50px;">
+                <div class="col border w-100"><label>{{ kalanUrun }}</label></div>
+                <div class="col border w-100"><label>{{ saglam }}</label></div>
+                <div class="col border w-100"><label>{{ hurda }}</label></div>
+              </div>
+
+              <div class="row">
+                <div class="col p-1 border w-100" style="height: 75px;"><button type="button" :disabled="!saglamBtn" @click="saglam++; this.kalanUrun = this.kalanUrun - 1; adetKontrol();" class="btn btn-success w-100 h-100 w-100 h-100">Sağlam Üretim</button></div>
+                <div class="col p-1 border w-100" style="height: 75px;"><button type="button" :disabled="!hurdaBtn" @click="hurda++;" class="btn btn-danger w-100 h-100 w-100 h-100">Hurda Üretim</button></div>
+                <div class="col p-1 border w-100" style="height: 75px;"><button type="button" :disabled="!araBtn" @click="urunSay(saglam,hurda)" class="btn btn-warning w-100 h-100 w-100 h-100">(Ara) Kayıt</button></div>
+              </div>
+
+              <div class="row mt-2">
+                <div class="col p-1 border w-100" style="height: 75px;"><button type="button" :disabled="!uretimBitirBtn" @click="uretimBitir()" class="btn btn-primary w-100 h-100 w-100 h-100">Üretimi Bitir</button></div>
+              </div>
+            </div>
+          </div>
+            
+
+          
+
         </div>
         Uygulama Alanı <br>
         Şu Link İyi https://stackblitz.com/edit/vue-1bngkw?file=src%2FApp.vue
@@ -67,18 +128,124 @@ import config from '../config'
 <script>
 export default {
     created() {
+      this.uygulamaBaslangic(true,false,false);
+
+      setInterval(()=>{
+        this.makineDurumuGetir();
+      },3000)
+
       this.makineGetir();
-      this.makineDurumuGetir();
-      this.funcSiparisGetir();
+      this.siparisGetir();
     },
     data() {
       return {
+
+        //MACHİNE DATAS
         makine: "",
         makineDurumu:"",
-        isEmri : []
+
+
+        //APPLICATION CONTROL DATAS
+        alanIsEmri: false,
+        alanUretimTakip : false,
+        alanUretimBasla: false,
+
+        //DIV CONTROL
+        saglamBtn : true,
+        hurdaBtn : true,
+        araBtn : true,
+        uretimBitirBtn:true,
+
+
+        //PRODUCTION DATAS
+        isEmri : [],
+        uretimEmri: [],
+        kalanUrun : 0,
+        saglam:0,
+        hurda:0
       };
     },
     methods: {
+
+      uretimBitir(uretimNo){
+        // TODO Uretim Bitir Axios İle
+        this.isEmri = []
+        this.uygulamaBaslangic(true,false,false)
+        //this.uretimBtnKontrol(true,true,true,true)
+      },
+       
+      urunSay(saglam,hurda){
+        var toplamParca = saglam + hurda
+        const veriler = {
+          "total": toplamParca,
+          "hurda":hurda,
+          "machine":this.makine
+        }
+        axios
+          .post( this.$hostname + "/nodered/countByMachine",veriler)
+          .then(response => {
+            this.uretimEmri[2] = this.kalanUrun
+            this.saglam = 0
+            this.hurda = 0
+            
+          })
+          .catch(error => {
+            this.errors.push(error);
+        });
+        
+      },
+
+      adetKontrol(){
+        if(this.saglam == this.uretimEmri[2]){
+          this.uretimBtnKontrol(false,false,true,true)
+          this.urunSay(this.saglam, this.hurda)
+        }
+      },
+
+
+      uretimBtnKontrol(saglam,hurda,ara,uretimBitir){
+        this.saglamBtn = saglam
+        this.hurdaBtn = hurda
+        this.araBtn = ara
+        this.uretimBitirBtn = uretimBitir
+      },
+
+      uretimBasla(uretimNo){
+        const veriler = {
+          "machine":this.makine,
+          "order_id" : uretimNo
+        }
+        this.kalanUrun = this.uretimEmri[2]
+        this.uygulamaBaslangic(false,false,true)
+        
+        // TODO UMH Üretim'i Başlat
+        /*
+        axios
+          .post( this.$hostname + "/nodered/startOderByMachine",veriler)
+          .then(response => {
+            console.log(response)
+          })
+          .catch(error => {
+            this.errors.push(error);
+          })*/
+
+      },
+
+      uretimEmriOnayla(){
+        var veri = document.getElementById('isEmri').value
+        this.uretimEmri = veri.split(",")
+        console.log(this.uretimEmri)
+        this.uygulamaBaslangic(false,true,false);
+      },
+
+      uygulamaBaslangic(alanIsEmri, alanUretimBasla, alanUretimTakip ){
+        this.alanIsEmri = alanIsEmri
+        this.alanUretimBasla = alanUretimBasla
+        this.alanUretimTakip = alanUretimTakip
+        this.isEmri = []
+        this.siparisGetir()
+      },
+
       makineGetir(){
         this.makine = localStorage.makine
         console.log(this.makine)
@@ -86,20 +253,34 @@ export default {
       },
 
       makineDurumuGetir() {
+        const stateMakine = {"machine":this.makine}
         axios
-          .get( this.$hostname + "/nodered/checkMachineState")
+          .post( this.$hostname + "/nodered/checkMachineState",stateMakine)
           .then(response => {
             this.makineDurumu = response.data
+            
           })
           .catch(error => {
             this.errors.push(error);
           });
-      }
-    },
+      },
 
-    funcSiparisGetir(){
-
-    }
+      siparisGetir() {
+        const stateMakine = {"machine":this.makine}
+        axios
+          .post( this.$hostname + "/nodered/orderSelectbyMachine",stateMakine)
+          .then(response => {
+            var uzunluk = response.data.length
+            for (var x = 0; x < uzunluk; x = x + 1){
+              console.log(response.data[x])
+              this.isEmri.push(response.data[x])
+            }
+          })
+          .catch(error => {
+            this.errors.push(error);
+          });
+      },   
+    } 
   };
 
 
