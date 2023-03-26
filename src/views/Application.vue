@@ -168,10 +168,27 @@ export default {
     methods: {
 
       uretimBitir(uretimNo){
-        // TODO Uretim Bitir Axios İle
-        this.isEmri = []
-        this.uygulamaBaslangic(true,false,false)
-        //this.uretimBtnKontrol(true,true,true,true)
+
+        const veriler = {
+          "machine":this.makine,
+          "order_id" : uretimNo
+        }
+        
+        
+        axios
+          .post( this.$hostname + "/nodered/endOrderByMachine",veriler)
+          .then(response => {
+            this.isEmri = []
+            this.uygulamaBaslangic(true,false,false)
+            this.saglam = 0
+            this.hurda = 0
+            this.uretimEmri = []
+            this.kalanUrun = 0
+          })
+          .catch(error => {
+            this.errors.push(error);
+          })
+
       },
        
       urunSay(saglam,hurda){
@@ -197,7 +214,7 @@ export default {
 
       adetKontrol(){
         if(this.saglam == this.uretimEmri[2]){
-          this.uretimBtnKontrol(false,false,true,true)
+          this.uretimBtnKontrol(false,false,false,true)
           this.urunSay(this.saglam, this.hurda)
         }
       },
@@ -211,23 +228,22 @@ export default {
       },
 
       uretimBasla(uretimNo){
+        console.log(uretimNo)
         const veriler = {
           "machine":this.makine,
           "order_id" : uretimNo
         }
-        this.kalanUrun = this.uretimEmri[2]
-        this.uygulamaBaslangic(false,false,true)
         
-        // TODO UMH Üretim'i Başlat
-        /*
         axios
           .post( this.$hostname + "/nodered/startOderByMachine",veriler)
           .then(response => {
-            console.log(response)
+            this.kalanUrun = this.uretimEmri[2]
+            this.uygulamaBaslangic(false,false,true)
+            this.uretimBtnKontrol(true,true,true,true)
           })
           .catch(error => {
             this.errors.push(error);
-          })*/
+          })
 
       },
 
