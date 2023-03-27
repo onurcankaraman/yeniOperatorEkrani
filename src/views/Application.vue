@@ -102,16 +102,16 @@ import config from '../config'
       <div class="col-12 col-md-8 col-lg-6 col-xl-5 border mh-100">    
         <div class="container">
           <div class="row mt-2">
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100 w-100 h-100">Secondary</button></div>
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100">Secondary</button></div>
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100">Secondary</button></div>
+            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100" :value ="durus[0][1]">{{ durus[0][0] }}</button></div>
+            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100" :value ="durus[1][1]">{{ durus[1][0] }}</button></div>
+            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100" :value ="durus[2][1]">{{ durus[2][0] }}</button></div>
+            <div class="w-100 mt-2"></div>
+            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100" :value ="durus[3][1]">{{ durus[3][0] }}</button></div>
+            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100" :value ="durus[4][1]">{{ durus[4][0] }}</button></div>
+            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100" :value ="durus[5][1]">{{ durus[5][0] }}</button></div>
             <div class="w-100 mt-2"></div>
             <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100">Secondary</button></div>
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100">Secondary</button></div>
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100">Secondary</button></div>
-            <div class="w-100 mt-2"></div>
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100">Secondary</button></div>
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100">Secondary</button></div>
+            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100" :value ="durus[6][1]">{{ durus[6][0] }}</button></div>
             <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100">Secondary</button></div>
             <div class="w-100 mt-2"></div>
             <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100">Secondary</button></div>
@@ -136,10 +136,11 @@ export default {
 
       this.makineGetir();
       this.siparisGetir();
+      this.durus = this.$duruslar
     },
     data() {
       return {
-
+        durus : [],
         //MACHİNE DATAS
         makine: "",
         makineDurumu:"",
@@ -168,7 +169,6 @@ export default {
     methods: {
 
       uretimBitir(uretimNo){
-
         const veriler = {
           "machine":this.makine,
           "order_id" : uretimNo
