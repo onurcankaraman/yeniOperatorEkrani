@@ -84,7 +84,7 @@ import config from '../config'
               </div>
 
               <div class="row mt-2">
-                <div class="col p-1 border w-100" style="height: 75px;"><button type="button" :disabled="!uretimBitirBtn" @click="uretimBitir()" class="btn btn-primary w-100 h-100 w-100 h-100">Üretimi Bitir</button></div>
+                <div class="col p-1 border w-100" style="height: 75px;"><button type="button" :disabled="!uretimBitirBtn" @click="uretimBitir(uretimEmri[0])" class="btn btn-primary w-100 h-100 w-100 h-100">Üretimi Bitir</button></div>
               </div>
             </div>
           </div>
@@ -179,11 +179,11 @@ export default {
           .post( this.$hostname + "/nodered/endOrderByMachine",veriler)
           .then(response => {
             this.isEmri = []
-            this.uygulamaBaslangic(true,false,false)
             this.saglam = 0
             this.hurda = 0
             this.uretimEmri = []
             this.kalanUrun = 0
+            this.uygulamaBaslangic(true,false,false)
           })
           .catch(error => {
             this.errors.push(error);
@@ -254,10 +254,10 @@ export default {
         this.uygulamaBaslangic(false,true,false);
       },
 
-      uygulamaBaslangic(alanIsEmri, alanUretimBasla, alanUretimTakip ){
-        this.alanIsEmri = alanIsEmri
-        this.alanUretimBasla = alanUretimBasla
-        this.alanUretimTakip = alanUretimTakip
+      uygulamaBaslangic(alanIsEmriVal, alanUretimBaslaVal, alanUretimTakipVal ){
+        this.alanIsEmri = alanIsEmriVal
+        this.alanUretimBasla = alanUretimBaslaVal
+        this.alanUretimTakip = alanUretimTakipVal
         this.isEmri = []
         this.siparisGetir()
       },
