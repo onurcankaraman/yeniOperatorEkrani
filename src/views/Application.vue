@@ -78,7 +78,7 @@ import config from '../config'
               </div>
 
               <div class="row">
-                <div class="col p-1 border w-100" style="height: 75px;"><button type="button" :disabled="!saglamBtn" @click="saglam++; this.kalanUrun = this.kalanUrun - 1; adetKontrol();" class="btn btn-success w-100 h-100 w-100 h-100">Sağlam Üretim</button></div>
+                <div class="col p-1 border w-100" style="height: 75px;"><button type="button" :disabled="!saglamBtn" @click="saglam++; kalanUrun = kalanUrun - 1; adetKontrol();" class="btn btn-success w-100 h-100 w-100 h-100">Sağlam Üretim</button></div>
                 <div class="col p-1 border w-100" style="height: 75px;"><button type="button" :disabled="!hurdaBtn" @click="hurda++;" class="btn btn-danger w-100 h-100 w-100 h-100">Hurda Üretim</button></div>
                 <div class="col p-1 border w-100" style="height: 75px;"><button type="button" :disabled="!araBtn" @click="urunSay(saglam,hurda)" class="btn btn-warning w-100 h-100 w-100 h-100">(Ara) Kayıt</button></div>
               </div>
