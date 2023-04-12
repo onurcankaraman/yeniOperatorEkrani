@@ -13,8 +13,8 @@
 
             <div class="mb-md-5 mt-md-4 pb-5">
 
-              <h2 class="fw-bold mb-2 text-uppercase">GİRİŞ YAPINIZ</h2>
-              <p class="text-white-50 mb-5">Operatör ID ve size verilen şifreyi giriniz</p>
+              <h2 class="fw-bold mb-2 text-uppercase">{{ loginTitle }}</h2>
+              <p class="text-white-50 mb-5">{{ loginDesc }}</p>
 
               <div class="form-outline form-white mb-4">
                 <input type="text" id="operatorNo" class="form-control form-control-lg" />
@@ -23,12 +23,12 @@
 
               <div class="form-outline form-white mb-4">
                 <input type="password" id="operatorPassword" class="form-control form-control-lg" />
-                <label class="form-label" for="operatorPassword">Şifrenizi Giriniz</label>
+                <label class="form-label" for="operatorPassword">Password</label>
               </div>
 
-              <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="javascript:void(0);" @click="parolaUnuttum(this)" >Parolomı Unuttum</a></p>
+              <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="javascript:void(0);" @click="parolaUnuttum(this)" >{{ forgotPass}}</a></p>
 
-              <button class="btn btn-outline-light btn-lg px-5" @click="girisYap(this)" type="button">Giriş Yap</button>
+              <button class="btn btn-outline-light btn-lg px-5" @click="girisYap(this)" type="button">{{ submitButton }}</button>
             </div>
           </div>
         </div>
@@ -40,6 +40,8 @@
 </template>
 
 <script>
+
+
 function girisYap(){
   let operatorNo = document.getElementById("operatorNo").value;
   let operatorPassword = document.getElementById("operatorPassword").value;
@@ -77,5 +79,21 @@ function parolaUnuttum(){
   });
 }
 
+export default {
+    created() {
+      this.loginTitle = this.$labelLanguage[this.$languageCode].loginText
+      this.loginDesc = this.$descriptionLanguage[this.$languageCode].loginTextDesc
+      this.forgotPass = this.$labelLanguage[this.$languageCode].forgotPassword
+      this.submitButton = this.$butonLanguage[this.$languageCode].submit
+    },
+    data() {
+      return {
+      };
+    },
+    methods: {
+
+     
+    }, 
+  };
 
 </script>

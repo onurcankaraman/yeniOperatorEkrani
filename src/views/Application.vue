@@ -1,7 +1,7 @@
 <script setup>
-import Swal from 'sweetalert2/dist/sweetalert2.js'
 import axios from 'axios'
-import config from '../config'
+import { createToast } from 'mosha-vue-toastify';
+import 'mosha-vue-toastify/dist/style.css'
 </script>
 
 <template>
@@ -95,17 +95,17 @@ import config from '../config'
       <div class="col-12 col-md-8 col-lg-6 col-xl-5 border mh-100">    
         <div class="container">
           <div class="row mt-2">
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100" @click="setState(durus[0][1])" :value ="durus[0][1]">{{ durus[0][0] }}</button></div>
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100" @click="setState(durus[1][1])" :value ="durus[1][1]">{{ durus[1][0] }}</button></div>
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100" @click="setState(durus[2][1])" :value ="durus[2][1]">{{ durus[2][0] }}</button></div>
+            <div class="col" style="height: 150px;"><button type="button" class="btn btn-success w-100 h-100" @click="setState(durus[0][1])">{{ durus[0][0] }}</button></div>
+            <div class="col" style="height: 150px;"><button type="button" class="btn btn-primary w-100 h-100" @click="setState(durus[1][1])">{{ durus[1][0] }}</button></div>
+            <div class="col" style="height: 150px;"><button type="button" class="btn btn-warning w-100 h-100" @click="setState(durus[2][1])">{{ durus[2][0] }}</button></div>
             <div class="w-100 mt-2"></div>
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100" @click="setState(durus[3][1])" :value ="durus[3][1]">{{ durus[3][0] }}</button></div>
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100" @click="setState(durus[4][1])" :value ="durus[4][1]">{{ durus[4][0] }}</button></div>
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100" @click="setState(durus[5][1])" :value ="durus[5][1]">{{ durus[5][0] }}</button></div>
+            <div class="col" style="height: 150px;"><button type="button" class="btn btn-danger w-100 h-100" @click="setState(durus[3][1])">{{ durus[3][0] }}</button></div>
+            <div class="col" style="height: 150px;"><button type="button" class="btn btn-danger w-100 h-100" @click="setState(durus[4][1])" >{{ durus[4][0] }}</button></div>
+            <div class="col" style="height: 150px;"><button type="button" class="btn btn-danger w-100 h-100" @click="setState(durus[5][1])" >{{ durus[5][0] }}</button></div>
             <div class="w-100 mt-2"></div>
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100">Secondary</button></div>
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100" @click="setState(durus[6][1])" :value ="durus[6][1]">{{ durus[6][0] }}</button></div>
-            <div class="col" style="height: 150px;"><button type="button" class="btn btn-secondary w-100 h-100">Secondary</button></div>
+            <div class="col" style="height: 150px;"><button type="button" v-bind:hidden="true" class="btn btn-secondary w-100 h-100"></button></div>
+            <div class="col" style="height: 150px;"><button type="button" class="btn btn-info w-100 h-100" @click="setState(durus[6][1])" :value ="durus[6][1]">{{ durus[6][0] }}</button></div>
+            <div class="col" style="height: 150px;"><button type="button" v-bind:hidden="true" class="btn btn-secondary w-100 h-100"></button></div>
             <div class="w-100 mt-2"></div>
           </div>
         </div>
@@ -139,6 +139,7 @@ export default {
         alanIsEmri: false,
         alanUretimTakip : false,
         alanUretimBasla: false,
+        errors:[],
 
         //DIV CONTROL
         saglamBtn : true,
@@ -152,10 +153,18 @@ export default {
         uretimEmri: [],
         kalanUrun : 0,
         saglam:0,
-        hurda:0
+        hurda:0,
+
+        
       };
     },
     methods: {
+
+      toast (mesaj){
+      
+       
+
+      },
 
       setState(state){
 
@@ -163,13 +172,18 @@ export default {
           "machine":this.makine,
           "state" : state
         }
+
         
+
         axios
           .post( this.$hostname + "/nodered/setStatebyMachine",veriler)
           .then(response => {
-            this.kalanUrun = this.uretimEmri[2]
-            this.uygulamaBaslangic(false,false,true)
-            this.uretimBtnKontrol(true,true,true,true)
+            createToast('İşlem Başarılı: Makine Durumu ' + state +" olarak güncellendi.",
+            {
+            position: 'top-right',
+            type: 'default',
+            transition: 'zoom',
+            })
           })
           .catch(error => {
             this.errors.push(error);
