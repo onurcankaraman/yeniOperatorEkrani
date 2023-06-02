@@ -14,16 +14,31 @@ app.config.globalProperties.$menuLanguage = menuLanguage
 app.config.globalProperties.$labelLanguage = labelLanguage
 app.config.globalProperties.$butonLanguage = butonLanguage
 app.config.globalProperties.$descriptionLanguage = descriptionLanguage
-app.config.globalProperties.$languageCode = "EN"
+app.config.globalProperties.$languageCode = "TR"
 
 app.config.globalProperties.$duruslar = [
-    ["Çalıştır","10000"],
-    ["Mola","150000"],
-    ["Model Değişim","100000"],
-    ["Arıza","220000"],
-    ["Malzeme Yok","90000"],
-    ["Sipariş Yok","170000"],
-    ["Diğer Duruşlar","40000"]
+    // Stop For Turkish -> Array ID:0
+    [
+        ["Çalıştır","10000"],
+        ["Mola","150000"],
+        ["Model Değişim","100000"],
+        ["Arıza","220000"],
+        ["Malzeme Yok","90000"],
+        ["Sipariş Yok","170000"],
+        ["Diğer Duruşlar","40000"]
+    ],
+
+    // Stop For English -> Array ID:1
+    [
+        ["Product","10000"],
+        ["Break","150000"],
+        ["Change Over","100000"],
+        ["Technical Problem","220000"],
+        ["No Material","90000"],
+        ["No Order","170000"],
+        ["Other Stops","40000"]
+    ],
+    
 ]
 
 
